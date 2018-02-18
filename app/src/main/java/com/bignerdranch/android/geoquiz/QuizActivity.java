@@ -32,6 +32,13 @@ public class QuizActivity extends AppCompatActivity {
 
     private int mCurrentIndex = 0;
 
+    private void setButtonEnabled(boolean enabled) {
+        mTrueButton = (Button) findViewById(R.id.true_button);
+        mFalseButton = (Button) findViewById(R.id.false_button);
+        mTrueButton.setEnabled(enabled);
+        mFalseButton.setEnabled(enabled);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,6 +136,7 @@ public class QuizActivity extends AppCompatActivity {
     private void updateQuestion(){
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
+        setButtonEnabled(true);
     }
 
     private void checkAnswer(boolean userPressedTrue) {
@@ -138,8 +146,10 @@ public class QuizActivity extends AppCompatActivity {
 
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
+            setButtonEnabled(false);
         } else {
             messageResId = R.string.incorrect_toast;
+            setButtonEnabled(false);
         }
 
         Toast toast = Toast.makeText(this, messageResId, Toast.LENGTH_SHORT);
