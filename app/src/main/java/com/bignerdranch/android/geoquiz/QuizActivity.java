@@ -10,6 +10,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 public class QuizActivity extends AppCompatActivity {
 
     private static final String TAG = "QuizActivity";
@@ -20,6 +22,8 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mNextButton;
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
+    private int correct;
+    private int incorrect;
 
     private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
@@ -139,22 +143,33 @@ public class QuizActivity extends AppCompatActivity {
         setButtonEnabled(true);
     }
 
+    private void checkPercent() {
+        if (mQuestionBank.length == correct + incorrect) {
+            String percent_correct = this.getString(R.string.score_toast)+" " + correct + "/" + mQuestionBank.length;
+            Toast.makeText(this, percent_correct,  Toast.LENGTH_LONG).show();
+        }
+    }
+
     private void checkAnswer(boolean userPressedTrue) {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
-
         int messageResId = 0;
 
         if (userPressedTrue == answerIsTrue) {
             messageResId = R.string.correct_toast;
             setButtonEnabled(false);
+            correct = (correct+1);
         } else {
             messageResId = R.string.incorrect_toast;
             setButtonEnabled(false);
+            incorrect = (incorrect+1);
         }
 
         Toast toast = Toast.makeText(this, messageResId, Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 1, 1);
-                toast.show();
-    }
+        toast.show();
+        checkPercent();
+  }
+
+
 
 }
