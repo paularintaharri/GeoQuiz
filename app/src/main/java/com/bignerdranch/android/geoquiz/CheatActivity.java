@@ -24,7 +24,6 @@ public class CheatActivity extends AppCompatActivity {
     private TextView mAnswerTextView;
     private Button mShowAnswerButton;
     private TextView mApiLevel;
-
     private static final String TAG ="CheatActivity";
     private static final String KEY_ANSWER = "anwsered";
     private boolean mA;
@@ -53,7 +52,7 @@ public class CheatActivity extends AppCompatActivity {
 
         mApiLevel = (TextView)findViewById(R.id.api_level);
         int ApiLevel = Build.VERSION.SDK_INT;
-        mApiLevel.setText("API Level " + ApiLevel);
+        mApiLevel.setText("Api level" + ApiLevel);
 
         mAnswerIsTrue = getIntent().getBooleanExtra(EXTRA_ANSWER_IS_TRUE, false);
         mAnswerTextView = (TextView) findViewById(R.id.answer_text_view);

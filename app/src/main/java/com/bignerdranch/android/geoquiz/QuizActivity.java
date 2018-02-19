@@ -26,8 +26,10 @@ public class QuizActivity extends AppCompatActivity {
     private ImageButton mPrevButton;
     private TextView mQuestionTextView;
     private Button mCheatButton;
+    private TextView mNumberOfCheatsTextView;
     private int correct;
     private int incorrect;
+    private int mNumberOfCheats = 0;
 
     private Question[] mQuestionBank = new Question[] {
             new Question(R.string.question_australia, true),
@@ -114,6 +116,15 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             // Start CheatActivity
             public void onClick(View v) {
+                mNumberOfCheats++;
+                if (mNumberOfCheats >= 4) {
+                    Toast.makeText(QuizActivity.this, R.string.too_many_cheats_toast, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else {
+                    mNumberOfCheatsTextView = (TextView) findViewById(R.id.number_of_cheats_text_view);
+                    mNumberOfCheatsTextView.setText("You have done " + mNumberOfCheats + " cheat(s) ..." + (3-mNumberOfCheats) + " left");
+                }
                 boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
                 Intent intent = CheatActivity.newIntent(QuizActivity.this, answerIsTrue);
                 startActivityForResult(intent, REQUEST_CODE_CHEAT);
