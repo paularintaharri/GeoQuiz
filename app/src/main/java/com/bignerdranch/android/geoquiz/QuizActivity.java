@@ -175,9 +175,6 @@ public class QuizActivity extends AppCompatActivity {
     }
 
     private void updateQuestion() {
-        Log.d(TAG, "index " + mCurrentIndex);
-        Log.d(TAG, "question " + mQuestionBank.length);
-
         setNextButtonEnabled(true);
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
