@@ -48,6 +48,11 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton.setEnabled(enabled);
     }
 
+    private void setNextButtonEnabled(boolean enabled) {
+        mNextButton = (ImageButton) findViewById(R.id.next_button);
+        mNextButton.setEnabled(enabled);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +61,7 @@ public class QuizActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             mCurrentIndex = savedInstanceState.getInt(KEY_INDEX, 0);
+            mIsCheater = savedInstanceState.getBoolean("mIsCheater");
         }
 
         mQuestionTextView = (TextView) findViewById(R.id.question_text_view);
@@ -89,18 +95,18 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
                 mIsCheater = false;
-                updateQuestion();
-            }
+                    updateQuestion();
+                }
         });
 
-        mPrevButton = (ImageButton) findViewById(R.id.prev_button);
+       /* mPrevButton = (ImageButton) findViewById(R.id.prev_button);
         mPrevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mCurrentIndex = (mCurrentIndex - 1) % mQuestionBank.length;
                 updateQuestion();
             }
-        });
+        });*/
 
         mCheatButton = (Button)findViewById(R.id.cheat_button);
         mCheatButton.setOnClickListener(new View.OnClickListener() {
@@ -153,8 +159,8 @@ public class QuizActivity extends AppCompatActivity {
         super.onSaveInstanceState(savedInstanceState);
         Log.i(TAG, "onSaveInstanceState");
         savedInstanceState.putInt(KEY_INDEX, mCurrentIndex);
+        savedInstanceState.putBoolean("mIsCheater", mIsCheater);
     }
-
 
     @Override
     public void onStop() {
@@ -168,7 +174,11 @@ public class QuizActivity extends AppCompatActivity {
         Log.d(TAG, "onDestroy() called");
     }
 
-    private void updateQuestion(){
+    private void updateQuestion() {
+        Log.d(TAG, "index " + mCurrentIndex);
+        Log.d(TAG, "question " + mQuestionBank.length);
+
+        setNextButtonEnabled(true);
         int question = mQuestionBank[mCurrentIndex].getTextResId();
         mQuestionTextView.setText(question);
         setButtonEnabled(true);
@@ -185,8 +195,14 @@ public class QuizActivity extends AppCompatActivity {
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
 
+        if( mCurrentIndex +1 == mQuestionBank.length) {
+            setNextButtonEnabled(false);
+        }
         if (mIsCheater) {
             messageResId = R.string.judgment_toast;
+            incorrect = (incorrect + 1);
+            setButtonEnabled(false);
+
         } else {
 
             if (userPressedTrue == answerIsTrue) {
@@ -205,7 +221,4 @@ public class QuizActivity extends AppCompatActivity {
         toast.show();
         checkPercent();
   }
-
-
-
 }
